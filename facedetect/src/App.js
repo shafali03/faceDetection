@@ -17,7 +17,7 @@ import './App.css';
 
 //API key
 const app = new Clarifai.App({
-  apiKey: 'c5afb6ba2a7741ef801d8e8532e2d14d'
+  apiKey: '0d4280588cb643dd9b4f8afae6f0bd1b'
 });
 
 
@@ -33,23 +33,27 @@ const particlesOption = {
   }
 }
 
+
+const initialState = {
+  input: '',
+  imageUrl: '',
+  box: {},
+  route: 'signin',
+  isSignedIn: false,
+  user: {
+    id: '',
+    name: '',
+    email: '',
+    entries: 0,
+    joined: ''
+  }
+}
+
+
 class App extends Component {
   constructor() {
     super();
-    this.state = {
-      input: '',
-      imageUrl: '',
-      box: {},
-      route: 'signin',
-      isSignedIn: false,
-      user: {
-        id: '',
-        name: '',
-        email: '',
-        entries: 0,
-        joined: ''
-      }
-    }
+    this.state = initialState
   }
 
   //update user when received
@@ -70,6 +74,7 @@ class App extends Component {
     const image = document.getElementById('inputimage');
     const width = Number(image.width);
     const height = Number(image.height);
+    console.log(width, height);
     return {
       leftCol: clarifaiFace.left_col * width,
       topRow: clarifaiFace.top_row * height,
@@ -88,6 +93,7 @@ class App extends Component {
   }
 
   onButtonSubmit = () => {
+    console.log('click')
     this.setState({ imageUrl: this.state.input });
     app.models
       .predict(
@@ -117,7 +123,7 @@ class App extends Component {
   //we're signin out need to setState to signOut
   onRouteChange = (route) => {
     if (route === 'signout') {
-      this.setState({ isSignedIn: false })
+      this.setState(initialState)
     } else if (route === 'home') {
       this.setState({ isSignedIn: true })
     }
